@@ -27,9 +27,11 @@ massive({
 
     //post
     app.post('/api/post',posts.createPost)
-
+    app.get('/api/users/:userId/posts',posts.getPost)
+    app.patch('/api/user/:id',posts.updatePost)
     //comment
     app.post('/comments', comment.createComment);
+    app.patch('/api/comment/:id',comment.editComment);
 
     const PORT = 3001;
     app.listen(PORT, () => {

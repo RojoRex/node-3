@@ -1,17 +1,37 @@
 
-function createComment(req, res){
-    const db = req.app.get('db')
-    const {userId, postId, comment} = req.body
-    if(userId !== '' && postId !== '' && comment !== ''){
-        const addComment ={id: db.comments.id, userId, postId, comment};
-        db.comments.data.push(addComment)
-        db.comments.id++
-        res.status(201).json(db.comments.data)
-    } else {
-        res.status(500).send(`the userId & postId & comment is empty! `)
-    }
+function createComment(req,res){
+    const db= req.app.get('db');
+
+    const {postId,userId,comment}=req.body;
+    db.comments
+    .save({
+        postId,
+        userId,
+        comment,
+    })
+    .then(post=>res.status(201).json(post))
+    .catch(err=>{
+        console.error(err);
+        res.status(500).end();
+    })
+}
+
+function editComment(req,res){
+    const db=req.app.get('db');
+    const {comment}=req.body
+
+    db.comments
+    .update(
+        {id:req.params.id,comment:{comment}}
+    .then(post=>res.status(201).json(post))
+    .catch(err=>{
+        console.error(err);
+        res.status(500).end();
+    })
+    )
 }
 
 module.exports = {
-    createComment
+    createComment,
+    editComment 
   }
